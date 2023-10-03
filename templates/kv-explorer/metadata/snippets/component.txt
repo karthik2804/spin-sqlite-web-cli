@@ -9,5 +9,5 @@ sqlite_databases = ["default"]
 [component.trigger]
 route = "/internal/sqlite/..."
 [component.config]
-username = "{{"{{ sqlite_username }}"}}"
-password = "{{"{{ sqlite_password }}"}}"
+sqlite_username = "{{"{{ sqlite_username }}"}}"
+sqlite_password = "{{"{{ sqlite_password }}"}}"
