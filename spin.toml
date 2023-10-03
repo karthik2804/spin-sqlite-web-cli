@@ -1,0 +1,29 @@
+spin_manifest_version = "1"
+authors = ["karthik2804 <karthik.ganeshram@fermyon.com>"]
+description = "A spin app to explore the the sqlite DB"
+name = "spin-sqlite-web-cli"
+trigger = { type = "http", base = "/" }
+version = "0.1.0"
+
+[variables]
+username = { required = true }
+password = { required = true }
+
+[[component]]
+id = "sql-cli"
+source = "target/spin-sqlite-web-cli.wasm"
+exclude_files = ["**/node_modules"]
+sqlite_databases = ["default"]
+[component.trigger]
+route = "/internal/sqlite/..."
+[component.build]
+command = "npm run build"
+watch = [
+    "assets/sqlite-cli.html",
+    "assets/index.js",
+    "assets/index.css",
+    "src/**/*",
+]
+[component.config]
+username = "{{ username }}"
+password = "{{ password }}"
