@@ -6,8 +6,8 @@ trigger = { type = "http", base = "/" }
 version = "0.1.0"
 
 [variables]
-username = { required = true }
-password = { required = true }
+sqliteusername = { required = true }
+sqlitepassword = { required = true }
 
 [[component]]
 id = "sql-cli"
@@ -25,5 +25,5 @@ watch = [
     "src/**/*",
 ]
 [component.config]
-username = "{{ username }}"
-password = "{{ password }}"
+sqliteusername = "{{ sqliteusername }}"
+sqlitepassword = "{{ sqlitepassword }}"

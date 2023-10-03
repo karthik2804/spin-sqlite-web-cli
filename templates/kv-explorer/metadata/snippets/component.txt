@@ -1,0 +1,13 @@
+[variables]
+sqlite_username = { required = true }
+sqlite_password = { required = true }
+
+[[component]]
+id = "sql-cli"
+source = { url = "https://github.com/karthik2804/spin-sqlite-web-cli/releases/download/v0.0.1/spin-sqlite-web-cli.wasm", digest = "sha256:193f5a065704a77b67eac48b3a5b68582fdfa2e5440cd879fa0d64f13ba627d0" }
+sqlite_databases = ["default"]
+[component.trigger]
+route = "/internal/sqlite/..."
+[component.config]
+username = "{{"{{ sqlite_username }}"}}"
+password = "{{"{{ sqlite_password }}"}}"

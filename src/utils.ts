@@ -4,8 +4,8 @@ const decoder = new TextDecoder()
 const encoder = new TextEncoder()
 
 async function handleAuth(authToken: string): Promise<boolean> {
-    let username = Config.get("username")
-    let password = Config.get("password")
+    let username = Config.get("sqlite_username")
+    let password = Config.get("sqlite_password")
     let hashBuffer = await crypto.subtle.digest("SHA-256", encoder.encode(`${username}:${password}`).buffer)
     const hashArray = Array.from(new Uint8Array(hashBuffer)); // convert buffer to byte array
     const hashHex = hashArray
