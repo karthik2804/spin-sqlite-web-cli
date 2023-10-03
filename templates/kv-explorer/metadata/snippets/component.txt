@@ -4,7 +4,7 @@ sqlite_password = { required = true }
 
 [[component]]
 id = "sql-cli"
-source = { url = "https://github.com/karthik2804/spin-sqlite-web-cli/releases/download/v0.0.1/spin-sqlite-web-cli.wasm", digest = "sha256:193f5a065704a77b67eac48b3a5b68582fdfa2e5440cd879fa0d64f13ba627d0" }
+source = { url = "https://github.com/karthik2804/spin-sqlite-web-cli/releases/download/v0.0.1/spin-sqlite-web-cli.wasm", digest = "sha256:e0fb024ffaa68e53118a6b45636161d2a43543cf2bd0b6d027d01a34f4ee56e4" }
 sqlite_databases = ["default"]
 [component.trigger]
 route = "/internal/sqlite/..."
