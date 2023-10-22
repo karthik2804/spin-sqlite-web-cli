@@ -6,6 +6,10 @@ interface ExecuteRequest {
     database: string
 }
 
+interface DumpRequest {
+    database: string
+}
+
 async function execute(req: HttpRequest): Promise<HttpResponse> {
 
     if (!(await handleAuth(req.headers["authorization"]))) {
@@ -14,9 +18,11 @@ async function execute(req: HttpRequest): Promise<HttpResponse> {
         }
     }
     let req_data = req.json() as ExecuteRequest
-    let db = Sqlite.openDefault()
+    console.log(req_data.database)
+    if (!req_data.database) { req_data.database = "default" }
     let result
     try {
+        let db = Sqlite.open(req_data.database)
         result = db.execute(req_data.statement, [])
         return {
             status: 200,
@@ -49,9 +55,11 @@ async function dump(req: HttpRequest): Promise<HttpResponse> {
         }
     }
 
+    let req_data = req.json() as DumpRequest
+    if (!req_data.database) { req_data.database = "default" }
     let response = "BEGIN TRANSACTION;\n"
 
-    let db = Sqlite.openDefault()
+    let db = Sqlite.open(req_data.database)
     try {
 
         let tables = db.execute("SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite%'", [])

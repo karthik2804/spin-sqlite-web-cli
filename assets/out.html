@@ -130,6 +130,16 @@ div {
 
 .command {
     color: yellow;
+}
+
+table {
+    border: 1px solid;
+}
+
+th,
+td {
+    padding: 0.25rem 1rem;
+    text-align: center;
 }</style>
   </head>
 
@@ -161,6 +171,7 @@ const HELP_TEXT = `The list of commands is
 .tables to display all the tables
 .dump to download a dump of the database
 .schema to list the schema of the tables
+.format to change the output format between json and table
 `
 
 const UNKNOWN_DOT_COMMAND = "Unknown usage of dot command. Type \".help\" to list all known commands"
@@ -203,6 +214,10 @@ class Li {
         this.el = el("div.output");
     }
     update(data) {
+        if (data.raw) {
+            this.el.innerHTML = data.raw
+            return
+        }
         this.el.textContent = data.text
         if (data.type) {
             this.el.classList.add(data.type)
@@ -258,6 +273,7 @@ class CommandComponent {
         this.callback = callback
         this.unauthorizedCallback = unauthorizedCallback
         this.keycodeHandler = keycodeHandler
+        this.outputFomat = "json"
         this.multilineStatus = {
             state: false,
             comment: false
@@ -408,6 +424,23 @@ class CommandComponent {
                 return
             }
             this.dump()
+        } else if (args[0] == ".format") {
+            if (args.length != 2) {
+                this.callback({ text: `> ${value}`, type: "command" })
+                this.callback({ text: "ERROR: It takes exactly one argument (eg) .format json", type: "error" })
+                this.resetInputSegment()
+                return
+            }
+            if (args[1] != "json" && args[1] != "table") {
+                this.callback({ text: `> ${value}` })
+                this.callback({ text: "ERROR: Argument can only be either \"json\" or \"table\"", type: "error" })
+                this.resetInputSegment()
+                return
+            }
+            this.callback({ text: `> ${value}`, type: "command" })
+            this.callback({ text: `Changed output formatting to ${args[1]}`, type: "download-success" })
+            this.outputFomat = args[1]
+            this.commandHistory.push(value)
         } else {
             this.callback({ text: UNKNOWN_DOT_COMMAND })
         }
@@ -424,9 +457,11 @@ class CommandComponent {
             this.unauthorizedCallback()
         }
         if (res.status == "success") {
-            console.log(res.data)
-            this.callback({ text: `${JSON.stringify(res.data.rows, null, 2)} `, type: "success" })
-            console.log(jsonToHtmlTable(res.data.rows, res.data.columns))
+            if (this.outputFomat == "json") {
+                this.callback({ text: `${JSON.stringify(res.data.rows, null, 2)} `, type: "success" })
+            } else {
+                this.callback({ raw: jsonToHtmlTable(res.data.rows, res.data.columns) })
+            }
         } else {
             this.callback({ text: `ERROR: ${res.reason} `, type: "error" })
         }

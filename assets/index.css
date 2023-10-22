@@ -49,9 +49,15 @@ footer {
     background-color: #0e092d;
     border-top: 1px solid #384687;
     display: flex;
+    justify-content: space-around;
     padding: 1rem;
     align-items: center;
     color: white;
+}
+
+footer a {
+    color: #34e8bd;
+    text-decoration: none;
 }
 
 .cli-window {
@@ -124,4 +130,18 @@ div {
 
 .command {
     color: yellow;
+}
+
+.warn {
+    color: yellowgreen;
+}
+
+table {
+    border: 1px solid;
+}
+
+th,
+td {
+    padding: 0.25rem 1rem;
+    text-align: center;
 }

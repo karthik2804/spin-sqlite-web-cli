@@ -19,6 +19,8 @@ const HELP_TEXT = `The list of commands is
 .tables to display all the tables
 .dump to download a dump of the database
 .schema to list the schema of the tables
+.format to change the output format between json and table
+.database to choose a different db label to run queries against
 `
 
 const UNKNOWN_DOT_COMMAND = "Unknown usage of dot command. Type \".help\" to list all known commands"
@@ -117,6 +119,7 @@ class LoginComponent {
 
 class CommandComponent {
     constructor(callback, unauthorizedCallback, keycodeHandler) {
+        this.database = "default"
         this.callback = callback
         this.unauthorizedCallback = unauthorizedCallback
         this.keycodeHandler = keycodeHandler
@@ -288,6 +291,23 @@ class CommandComponent {
             this.callback({ text: `Changed output formatting to ${args[1]}`, type: "download-success" })
             this.outputFomat = args[1]
             this.commandHistory.push(value)
+        } else if (args[0] == ".database") {
+            if (args.length == 1) {
+                this.callback({ text: `> ${value}` })
+                this.callback({ text: `Current active database is \"${this.database}\"`, type: "" })
+                this.resetInputSegment()
+                return
+            }
+            if (args.length != 2) {
+                this.callback({ text: `> ${value}` })
+                this.callback({ text: "ERROR: Takes exactly one argument (e.g) \".databse new-label\"", type: "error" })
+                this.resetInputSegment()
+                return
+            }
+            this.database = args[1]
+            this.callback({ text: `> ${value}`, type: "command" })
+            this.callback({ text: `Switched database label to ${args[1]}`, type: "download-success" })
+
         } else {
             this.callback({ text: UNKNOWN_DOT_COMMAND })
         }
@@ -298,8 +318,8 @@ class CommandComponent {
             this.commandHistory.pop()
         }
         this.commandHistory.push(commandName || value)
-        let res = await executeRequest(value)
-        this.callback({ text: `> ${commandName || value} `, type: "statement" })
+        let res = await executeRequest(value, this.database)
+        this.callback({ text: `> ${commandName || value} `, type: "command" })
         if (res.status == "failed" && res.reason == "unauthorized") {
             this.unauthorizedCallback()
         }
@@ -311,6 +331,10 @@ class CommandComponent {
             }
         } else {
             this.callback({ text: `ERROR: ${res.reason} `, type: "error" })
+            if (res.reason.trim() == "InternalError: Error::AccessDenied") {
+                this.callback({ text: `check if the database label \"${this.database}\" exists`, type: "warn" })
+                this.callback({ text: `if label exists, make sure explorer component has access to it`, type: "warn" })
+            }
         }
         this.resetInputSegment()
     }
@@ -429,14 +453,14 @@ async function authenticate(username, password) {
     return res.status == 200
 }
 
-async function executeRequest(statement) {
+async function executeRequest(statement, database) {
     let resp = await fetch(window.location.origin + "/internal/sqlite/execute",
         {
             headers: {
                 "Authorization": `Bearer ${model.state.authkey} `
             },
             method: "POST",
-            body: JSON.stringify({ statement: statement })
+            body: JSON.stringify({ statement: statement, database: database })
         })
     if (resp.status == 401) {
         return {
@@ -453,7 +477,7 @@ async function executeRequest(statement) {
     } else {
         const errorMessagePattern = /Error::Io\("(.*)"\)/
         const match = data.reason.match(errorMessagePattern);
-        let reason = match[1] ? match[1] : data
+        let reason = match && match[1] ? match[1] : data.reason
         return {
             status: "failed",
             reason: reason
@@ -485,7 +509,7 @@ async function dumpDB() {
     } else {
         const errorMessagePattern = /Error::Io\("(.*)"\)/
         const match = data.reason.match(errorMessagePattern);
-        let reason = match[1] ? match[1] : data
+        let reason = match[1] ? match[1] : data.reason
         return {
             status: "failed",
             reason: reason
