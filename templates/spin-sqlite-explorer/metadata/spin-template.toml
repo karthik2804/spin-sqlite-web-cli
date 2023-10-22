@@ -1,0 +1,12 @@
+manifest_version = "1"
+id = "spin-sqlite-explorer"
+description = "A component to provide a web shell for sqlite"
+trigger_type = "http"
+tags = ["http", "sqlite"]
+
+[add_component]
+skip_files = ["spin.toml"]
+[add_component.snippets]
+component = "component.txt"
+
+[parameters]
