@@ -4,7 +4,7 @@
   "description": "A spin app to explore the the sqlite DB",
   "main": "index.js",
   "scripts": {
-    "build": "npx inline-script-tags assets/sqlite-cli.html assets/index.html && npx inline-stylesheets assets/index.html assets/index.html && npx webpack --mode=production && mkdir -p target && spin js2wasm -o target/spin-sqlite-web-cli.wasm dist/spin.js",
+    "build": "npx inline-script-tags assets/index.html assets/out.html && npx inline-stylesheets assets/out.html assets/out.html && npx webpack --mode=production && mkdir -p target && spin js2wasm -o target/spin-sqlite-web-cli.wasm dist/spin.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

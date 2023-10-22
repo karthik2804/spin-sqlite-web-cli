@@ -5,14 +5,17 @@ body {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    font-size: 16px;
+    line-height: 1.25rem;
 }
 
 body {
     width: 100%;
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
     background: #0e092d;
+    height: 100vh;
+    overflow: hidden;
 }
 
 header {
@@ -37,44 +40,108 @@ header div.title {
     padding: 1rem;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    overflow: hidden;
 }
 
-#app .query {
-    width: 100%;
-    font-size: 1rem;
+footer {
+    height: 3rem;
+    background-color: #0e092d;
+    border-top: 1px solid #384687;
     display: flex;
-    margin-bottom: 2rem;
-}
-
-#app .query-input {
-    flex-grow: 1;
-    border: none;
-    border-radius: 0.67rem 0 0 0.67rem;
+    justify-content: space-around;
     padding: 1rem;
+    align-items: center;
+    color: white;
 }
 
-#app .query-input:focus {
-    outline: none;
+footer a {
+    color: #34e8bd;
+    text-decoration: none;
 }
 
-#app .query button {
-    padding: 1rem;
-    border-radius: 0 0.67rem 0.67rem 0;
-    background-color: green;
-}
-
-#app .result {
+.cli-window {
     width: 100%;
-}
-
-pre.result {
+    max-width: 1200px;
+    overflow-y: auto;
+    height: 100%;
+    border-radius: 0.67rem;
     background: linear-gradient(52deg, #140d3f 0%, #1d183e 100%);
     padding: 1rem;
+    color: white;
 }
 
-.result code {
-    width: 100%;
-    font-size: 1rem;
+.cli-window div {
+    white-space: pre;
+}
+
+.intro {
+    margin-bottom: 1rem;
+}
+
+div {
+    font-size: 1em;
+}
+
+.prompt {
+    display: flex;
+}
+
+.prompt .prefix {
+    white-space: pre;
+    color: #34e8bd;
+}
+
+.prompt input {
+    flex-grow: 1;
+    outline: none;
+    border: none;
+    background-color: transparent;
     color: white;
-    border-radius: 0.67rem;
+    font-size: 1em;
+    caret-color: #34e8bd;
+    caret-shape: block;
+}
+
+.output {
+    margin-bottom: 0.5rem;
+}
+
+.comment,
+.multiline-comment {
+    color: gray;
+    font-size: 1em;
+}
+
+
+
+.download-success {
+    color: #34e8bd
+}
+
+.error {
+    color: red;
+}
+
+.statement {
+    color: pink;
+    font-weight: 600;
+}
+
+.command {
+    color: yellow;
+}
+
+.warn {
+    color: yellowgreen;
+}
+
+table {
+    border: 1px solid;
+}
+
+th,
+td {
+    padding: 0.25rem 1rem;
+    text-align: center;
 }

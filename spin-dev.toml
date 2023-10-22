@@ -1,0 +1,36 @@
+spin_manifest_version = "1"
+authors = ["karthik2804 <karthik.ganeshram@fermyon.com>"]
+description = "A spin app to explore the the sqlite DB"
+name = "spin-sqlite-web-cli"
+trigger = { type = "http", base = "/" }
+version = "0.1.0"
+
+[variables]
+sqlite_username = { required = true }
+sqlite_password = { required = true }
+
+[[component]]
+id = "sql-cli"
+source = "target/spin-sqlite-web-cli.wasm"
+exclude_files = ["**/node_modules"]
+sqlite_databases = ["default"]
+[component.trigger]
+route = "/internal/sqlite/..."
+[component.build]
+command = "npm run build"
+watch = [
+    "assets/sqlite-cli.html",
+    "assets/index.js",
+    "assets/index.css",
+    "src/**/*",
+]
+[component.config]
+sqlite_username = "{{ sqlite_username }}"
+sqlite_password = "{{ sqlite_password }}"
+
+[[component]]
+source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.0.3/spin_static_fs.wasm", digest = "sha256:38bf971900228222f7f6b2ccee5051f399adca58d71692cdfdea98997965fd0d" }
+id = "dev"
+files = [{ source = "assets", destination = "/" }]
+[component.trigger]
+route = "/static/..."

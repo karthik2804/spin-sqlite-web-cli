@@ -1,5 +1,5 @@
 import { Config, HttpResponse } from "@fermyon/spin-sdk"
-const ui = require("../assets/index.html")
+const ui = require("../assets/out.html")
 const decoder = new TextDecoder()
 const encoder = new TextEncoder()
 
