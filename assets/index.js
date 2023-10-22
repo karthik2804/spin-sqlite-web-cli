@@ -4,8 +4,8 @@ const decoder = new TextDecoder();
 
 const model = {
     state: {
-        loggedin: true,
-        authkey: "6ec8930cf90c7f93688d476eb7f84db297bb9af9606ef2612291735b0a978348"
+        loggedin: false,
+        authkey: null
     }
 }
 
