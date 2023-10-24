@@ -10,7 +10,7 @@ spin templates install --upgrade --git https://github.com/karthik2804/spin-sqlit
 
 To create a new component
 ```bash
-spin add sqlite-cli
+spin add spin-sqlite-explorer
 ```
 **note**: When running the spin add, the component will try add its config variables to the `spin.toml`, if you already have a `[variables]` section, consolidate the values. 
 
