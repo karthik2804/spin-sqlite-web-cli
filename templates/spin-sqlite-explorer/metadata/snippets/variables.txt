@@ -1,0 +1,2 @@
+sqlite_username = { required = true }
+sqlite_password = { required = true }

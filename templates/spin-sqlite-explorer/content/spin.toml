@@ -1,20 +1,25 @@
-spin_manifest_version = "1"
-authors = ["karthik2804 <karthik.ganeshram@fermyon.com>"]
-description = "A spin app to explore the the sqlite DB"
-name = "spin-sqlite-explorer"
-trigger = { type = "http", base = "/" }
+spin_manifest_version = "2"
+
+[application]
+name = "{{project-name}}"
 version = "0.1.0"
 
 [variables]
 sqlite_username = { required = true }
 sqlite_password = { required = true }
 
-[[component]]
+[application.trigger.http]
+base = "/"
+
+[[trigger.http]]
+component = "{{project-name | kebab_case}}"
+route = "/internal/sqlite/..."
+
+[component.{{project-name | kebab_case}}]
 id = "sql-cli"
 source = { url = "https://github.com/karthik2804/spin-sqlite-web-cli/releases/download/v0.1.0/spin-sqlite-web-cli.wasm", digest = "sha256:2bab8dca3c50bc082c543ce9e9b367aec03e9de1efd62c6b748035bd9de48356" }
 sqlite_databases = ["default"]
-[component.trigger]
-route = "/internal/sqlite/..."
-[component.config]
+
+[component.{{project-name | kebab_case}}.variables]
 sqlite_username = "{{"{{ sqlite_username }}"}}"
 sqlite_password = "{{"{{ sqlite_password }}"}}"
